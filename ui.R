@@ -2,18 +2,18 @@ library(shiny)
 library(DT)
 
 fluidPage(
-  mainPanel(
     tabsetPanel(
       tabPanel("Données",
                br(),
-               dataTableOutput("donnees")
+               column(6, offset = 3, dataTableOutput("donnees"))
       ),
       tabPanel("Visualisation", 
                br(),
-               selectInput("selectedVar", choices = c("Height", "Weight"), label = NULL),
-               uiOutput("slider"),
-               plotOutput("distPlot")
+               fluidRow(
+                 column(4, 
+                        selectInput("selectedVar", choices = c("Height", "Weight"), label = NULL),
+                        uiOutput("slider")),
+                 column(6, offset = 1,  plotOutput("distPlot")))
       )
     )
-  )
 )

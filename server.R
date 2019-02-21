@@ -18,7 +18,6 @@ function(input, output) {
   
   
   output$slider <- renderUI({
-    
     meanRef <- ifelse(input$selectedVar == "Height", 170, 70)
     sdRef <- ifelse(input$selectedVar == "Height", 10, 6)
     list(sliderInput("nObs", "Nombre d'observations :", min = 10, max = 1000, value = 100, step = 10),
@@ -38,5 +37,8 @@ function(input, output) {
     abscisse <- qnorm(seq(0, 1, length = 500), meanG, sdG)
     lines(abscisse, dnorm(abscisse, meanG, sdG), col = "red", lwd = 2)
   })
+  
+  
+
 }
 
