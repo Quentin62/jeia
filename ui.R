@@ -9,7 +9,9 @@ dashboardPage(dashboardHeader(title = "JEIA 2019"),
               dashboardSidebar(
                 sidebarMenu(id = "tabs",
                             menuItem("Pile ou face", tabName = "pile", icon = icon("coins")),
-                            menuItem("Taille et poids", tabName = "taille", icon = icon("ruler-vertical")))),
+                            menuItem("Taille et poids", tabName = "taille", icon = icon("ruler-vertical"))
+                            )
+                ),
               
               dashboardBody(
                 useShinyjs(),
@@ -34,8 +36,10 @@ dashboardPage(dashboardHeader(title = "JEIA 2019"),
                                      br(),
                                      sidebarLayout(
                                        sidebarPanel(selectInput("selectedVar", choices = c("Height", "Weight"), label = NULL),
+                                                    checkboxGroupInput("gender", "Genre :", c("Male", "Female"), selected = c("Male", "Female")),
                                                     uiOutput("slider")),
                                        mainPanel(plotOutput("distPlot"),
+                                                 br(),
                                                  actionButton("show", "Montrer les paramètres optimaux"),
                                                  br(), br(),
                                                  hidden(uiOutput("param"))
