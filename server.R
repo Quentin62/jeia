@@ -36,7 +36,8 @@ function(input, output, session) {
     pf <- c("P", "F")
     datPF <- rbinom(50000, 1, 0.6)
     plot_ly(x = seq_along(datPF), y = cumsum(datPF)/seq_along(datPF), type = "scatter", mode = "lines") %>%
-      layout(xaxis = list(title = "Nombre d'observations"), yaxis = list(title = "Proportion de face")) %>% 
+      layout(xaxis = list(title = "Nombre d'observations"), yaxis = list(title = "Proportion de face")) %>%
+      layout(shapes=list(type = "line", x0 = 1, x1 = 50000, y0 = 0.6, y1 = 0.6, line = list(dash = "dot", width = 1))) %>%
       config(displayModeBar = FALSE)
   })
 
