@@ -2,16 +2,28 @@ library(shiny)
 library(shinyjs)
 library(shinydashboard)
 library(DT)
+library(plotly)
 
-dashboardPage(skin = "red",
-              dashboardHeader(title = "JEIA 2019"),
+dashboardPage(dashboardHeader(title = "JEIA 2019"),
               
               dashboardSidebar(
                 sidebarMenu(id = "tabs",
+                            menuItem("Pile ou face", tabName = "pile", icon = icon("coins")),
                             menuItem("Taille et poids", tabName = "taille", icon = icon("ruler-vertical")))),
+              
               dashboardBody(
                 useShinyjs(),
                 tabItems(
+                  tabItem(tabName = "pile",
+                          br(),
+                          column(12, 
+                                 sliderInput("nObsPF", "Nombre d'observations :", min = 10, max = 1000, value = 50, step = 10),
+                                 verbatimTextOutput("donneesPF")),
+                          column(10, offset = 1, actionButton("showPlotPF", "Graphiques"),
+                                 br(), br(),
+                                 hidden(uiOutput("plotPF")))
+                  ),
+                  
                   tabItem(tabName = "taille", 
                           tabsetPanel(
                             tabPanel("Données",
@@ -34,4 +46,5 @@ dashboardPage(skin = "red",
                   )
                 )
               )
-)
+)   
+              
