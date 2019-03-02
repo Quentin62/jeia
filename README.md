@@ -18,7 +18,7 @@ Conseil : utiliser l'IDE [Rstudio](https://www.rstudio.com/products/rstudio/#Des
 
 Dans la console R :
 ```
-install.packages(c("shiny", "shinyjs", "DT"), repos = "https://cran.rstudio.com/")
+install.packages(c("shinydashboard", "shinyjs", "DT", "plotly"), repos = "https://cran.rstudio.com/")
 ```
 
 ## Lancer l'application
