@@ -1,4 +1,4 @@
-
+library(Rmixmod)
 
 
 
@@ -68,6 +68,10 @@ function(input, output, session) {
   # conversion du poids de pounds en kg
   donnees$Weight = 0.453592 * donnees$Weight
   
+  
+  resClassifTP <- mixmodCluster(donnees[,c(2, 3)], nbCluster = 2)
+  
+  
   output$donnees <- renderDataTable({
     datatable(donnees, options = list(pageLength = 20, dom = "tip", ordering = TRUE)) %>%
       formatRound("Height", digits = 2) %>%
@@ -116,6 +120,32 @@ function(input, output, session) {
   output$param <- renderUI({
     column(6, tags$b("Paramètres optimaux :"), verbatimTextOutput("estimateParameter"))
   })
+  
+  output$plotTP <- renderPlotly({
+    plot_ly(x = donnees$Height, y = donnees$Weight, color = donnees$Gender, colors = RColorBrewer::brewer.pal(3, "Set1")[1:2], type = "scatter", mode = "markers") %>%
+      layout(xaxis = list(title = "Taille", range = range(donnees$Height) * c(0.95, 1.04)), 
+             yaxis = list(title = "Poids", range = range(donnees$Weight) * c(0.95, 1.04))) %>%
+      config(displayModeBar = FALSE)
+  })
+  
+  output$plotClassif <- renderPlot({
+    invisible(capture.output(plot(resClassifTP)))
+  })
+  
+  output$paramClassifTP <- renderTable({
+    param <- round(resClassifTP@bestResult@parameters@mean, 2)
+    colnames(param) = c("Height", "Weight")
+    rownames(param) = c("Classe 1", "Classe 2")
+    
+    param
+  }, rownames = TRUE)
+  
+  
+  output$compPartition <- renderTable({
+    comp <- table(resClassifTP@bestResult@partition, donnees$Gender)
+    class(comp) = "matrix"
+    comp
+  }, rownames = TRUE)
   
   observeEvent(input$show, { 
     toggle("param", TRUE)

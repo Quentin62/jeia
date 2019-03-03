@@ -45,7 +45,16 @@ dashboardPage(dashboardHeader(title = "JEIA 2019"),
                                                  hidden(uiOutput("param"))
                                        )
                                      )
-                            )
+                            ),
+                            tabPanel("Visualisation (II)",
+                                     br(),
+                                     plotlyOutput("plotTP")),
+                            tabPanel("Classification",
+                                     br(),
+                                     plotOutput("plotClassif"),
+                                     br(),
+                                     box(tableOutput("paramClassifTP"), title = "Moyennes estimées", status = "primary"),
+                                     box(tableOutput("compPartition"), title = "Comparaison de la partition avec le genre", status = "primary"))
                           )
                   )
                 )
