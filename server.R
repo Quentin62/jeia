@@ -151,7 +151,18 @@ function(input, output, session) {
     toggle("param", TRUE)
   })
   
+  
 
+  # Iris --------------------------------------------------------------------
+  output$dataIris <- renderDT({
+    datatable(iris, options = list(pageLength = 20, dom = "tip", ordering = TRUE))
+  })
+  
+  output$plotIris <- renderPlotly({
+    plot_ly(x = iris[[input$abscisseIris]], y = iris[[input$ordonneesIris]], colors = RColorBrewer::brewer.pal(3, "Set1"), color = iris$Species, type = "scatter", mode = "markers") %>%
+      layout(xaxis = list(title = input$abscisseIris), yaxis = list(title = input$ordonneesIris)) %>%
+      config(displayModeBar = FALSE)
+  })
   
 }
 

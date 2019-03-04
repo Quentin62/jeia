@@ -9,9 +9,10 @@ dashboardPage(dashboardHeader(title = "JEIA 2019"),
               dashboardSidebar(
                 sidebarMenu(id = "tabs",
                             menuItem("Pile ou face", tabName = "pile", icon = icon("coins")),
-                            menuItem("Taille et poids", tabName = "taille", icon = icon("ruler-vertical"))
-                            )
-                ),
+                            menuItem("Taille et poids", tabName = "taille", icon = icon("ruler-vertical")),
+                            menuItem("Iris", tabName = "iris", icon = icon("leaf"))
+                )
+              ),
               
               dashboardBody(
                 useShinyjs(),
@@ -56,8 +57,20 @@ dashboardPage(dashboardHeader(title = "JEIA 2019"),
                                      box(tableOutput("paramClassifTP"), title = "Moyennes estimées", status = "primary"),
                                      box(tableOutput("compPartition"), title = "Comparaison de la partition avec le genre", status = "primary"))
                           )
+                  ),
+                  
+                  tabItem("iris",
+                          tabsetPanel(
+                            tabPanel("Données",
+                                     br(),
+                                     column(10, dataTableOutput("dataIris"))),
+                            tabPanel("Visualisation",
+                                     fluidRow(column(6, selectInput("abscisseIris", "Abscisse", colnames(iris)[-5], selected = "Sepal.Width")),
+                                              column(6, selectInput("ordonneesIris", "Ordonnée", colnames(iris)[-5]))),
+                                     fluidRow(column(12, plotlyOutput("plotIris"))))
+                          )
+                          
                   )
                 )
               )
 )   
-              
