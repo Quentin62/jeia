@@ -34,3 +34,8 @@ runApp()
 
 * Sur un serveur avec [Shiny Server](https://www.rstudio.com/products/shiny/shiny-server/)
 * Sur un serveur shiny : [Shiny Apps](http://www.shinyapps.io)
+
+## Version en ligne
+
+https://quenting.shinyapps.io/jeia/
+
