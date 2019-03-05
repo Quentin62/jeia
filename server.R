@@ -1,5 +1,5 @@
 library(Rmixmod)
-
+library(FactoMineR)
 
 
 function(input, output, session) {
@@ -213,5 +213,18 @@ function(input, output, session) {
       config(displayModeBar = FALSE)
   })
   
+  output$plotIris2 <- renderPlotly({
+    resPca <- PCA(iris, quali.sup = 5, graph = FALSE)
+    plot_ly(x = resPca$ind$coord[,1], y = resPca$ind$coord[,2], colors = RColorBrewer::brewer.pal(3, "Set1"), color = iris$Species, type = "scatter", mode = "markers") %>%
+      layout(xaxis = list(title = paste0("Composante 1 (",round(resPca$eig[1,2], 2),"%)")), 
+             yaxis = list(title = paste0("Composante 1 (",round(resPca$eig[2,2], 2),"%)"))) %>%
+      config(displayModeBar = FALSE)
+  })
+  
+  output$plotIris3 <- renderPlot({
+    resPca <- PCA(iris, quali.sup = 5, graph = FALSE)
+    
+    plot(resPca, choix = "var")
+  })
 }
 

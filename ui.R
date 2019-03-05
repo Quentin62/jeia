@@ -82,7 +82,13 @@ dashboardPage(dashboardHeader(title = "JEIA 2019"),
                             tabPanel("Visualisation",
                                      fluidRow(column(6, selectInput("abscisseIris", "Abscisse", colnames(iris)[-5], selected = "Sepal.Width")),
                                               column(6, selectInput("ordonneesIris", "Ordonnée", colnames(iris)[-5]))),
-                                     fluidRow(column(12, plotlyOutput("plotIris"))))
+                                     fluidRow(column(12, plotlyOutput("plotIris")))),
+                            tabPanel("Visualisation (II)",
+                                     br(),
+                                     column(10, offset = 1, box("Créer un nouveau repère orthogonal qui maximise la variabilité des données. Les nouveaux axes sont des combinaisons linéaires des variables d'originies.", 
+                                         title = "Analyses en composantes principales", solidHeader = TRUE, status = "primary", width = 10)),
+                                     column(12, plotlyOutput("plotIris2")),
+                                     column(8, offset = 2, plotOutput("plotIris3")))
                           )
                           
                   )
