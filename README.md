@@ -18,7 +18,7 @@ Conseil : utiliser l'IDE [Rstudio](https://www.rstudio.com/products/rstudio/#Des
 
 Dans la console R :
 ```
-install.packages(c("shinydashboard", "shinyjs", "DT", "plotly", "Rmixmod"), repos = "https://cran.rstudio.com/")
+install.packages(c("shinydashboard", "shinyjs", "DT", "plotly", "Rmixmod", "FactoMineR"), repos = "https://cran.rstudio.com/")
 ```
 
 ## Lancer l'application
