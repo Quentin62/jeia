@@ -55,7 +55,22 @@ dashboardPage(dashboardHeader(title = "JEIA 2019"),
                                      plotOutput("plotClassif"),
                                      br(),
                                      box(tableOutput("paramClassifTP"), title = "Moyennes estimées", status = "primary"),
-                                     box(tableOutput("compPartition"), title = "Comparaison de la partition avec le genre", status = "primary"))
+                                     box(tableOutput("compPartition"), title = "Comparaison de la partition avec le genre", status = "primary")),
+                            tabPanel("Régression",
+                                     br(),
+                                     h2("Prédire la taille en fonction du poids"),
+                                     
+                                     sidebarLayout(
+                                       sidebarPanel(checkboxGroupInput("gender2", "Genre :", c("Male", "Female"), selected = c("Male", "Female")),
+                                                    uiOutput("slider2")),
+                                       mainPanel(plotlyOutput("plotTP2"),
+                                                 br(),
+                                                 actionButton("show2", "Montrer les paramètres optimaux"),
+                                                 br(), br(),
+                                                 hidden(uiOutput("param2"))
+                                       )
+                                     )
+                            )
                           )
                   ),
                   

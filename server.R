@@ -3,7 +3,7 @@ library(Rmixmod)
 
 
 function(input, output, session) {
- 
+  
   # Pile ou face ------------------------------------------------------------
   
   output$donneesPF <- renderText({
@@ -21,7 +21,7 @@ function(input, output, session) {
     pf <- c("P", "F")
     datPF <- rbinom(nObsPF, 1, 0.6)
     datPF = pf[datPF + 1]
-
+    
     
     p <- plot_ly(x = pf, y = c(mean(datPF == pf[1]), mean(datPF == pf[2])), type = "bar") %>%
       layout(yaxis = list(title = "Proportion")) %>% 
@@ -40,12 +40,12 @@ function(input, output, session) {
       layout(shapes=list(type = "line", x0 = 1, x1 = 50000, y0 = 0.6, y1 = 0.6, line = list(dash = "dot", width = 1))) %>%
       config(displayModeBar = FALSE)
   })
-
+  
   
   output$plotPF <- renderUI({
     tabBox(title = "Graphiques", width = 12,
-      tabPanel("Proportion", plotlyOutput("plotPF1")),
-      tabPanel("Convergence", plotlyOutput("plotPF2"))
+           tabPanel("Proportion", plotlyOutput("plotPF1")),
+           tabPanel("Convergence", plotlyOutput("plotPF2"))
     )
   })
   
@@ -53,7 +53,7 @@ function(input, output, session) {
     toggle("plotPF", TRUE)
   })
   
-
+  
   
   
   
@@ -85,7 +85,7 @@ function(input, output, session) {
     sdRef <- ifelse(input$selectedVar == "Height", 9, 14)
     sdRef = sdRef - ifelse(length(input$gender) == 1, ceiling(0.3 * sdRef), 0)
     nMaxObs <- ifelse(length(input$gender) == 1, 5000, 10000)
-
+    
     list(sliderInput("nObs", "Nombre d'observations :", min = 10, max = nMaxObs, value = 100, step = 10),
          sliderInput("mean", "Moyenne :", min = meanRef - ceiling(0.2*meanRef), max = meanRef + ceiling(0.2*meanRef), value = meanRef, step = 0.5),
          sliderInput("sd", "Écart-type :", min = sdRef - ceiling(0.3*sdRef), max = sdRef + ceiling(0.3*sdRef), value = sdRef, step = 0.25))
@@ -121,6 +121,10 @@ function(input, output, session) {
     column(6, tags$b("Paramètres optimaux :"), verbatimTextOutput("estimateParameter"))
   })
   
+  observeEvent(input$show, { 
+    toggle("param", TRUE)
+  })
+  
   output$plotTP <- renderPlotly({
     plot_ly(x = donnees$Height, y = donnees$Weight, color = donnees$Gender, colors = RColorBrewer::brewer.pal(3, "Set1")[1:2], type = "scatter", mode = "markers") %>%
       layout(xaxis = list(title = "Taille", range = range(donnees$Height) * c(0.95, 1.04)), 
@@ -147,12 +151,57 @@ function(input, output, session) {
     comp
   }, rownames = TRUE)
   
-  observeEvent(input$show, { 
-    toggle("param", TRUE)
+  
+  
+  output$slider2 <- renderUI({
+    nMaxObs <- ifelse(length(input$gender) == 1, 5000, 10000)
+    
+    list(sliderInput("nObs2", "Nombre d'observations :", min = 10, max = nMaxObs, value = 50, step = 10),
+         sliderInput("const", "Constante :", min = 80, max = 180, value = 140, step = 0.5),
+         sliderInput("coeff", "Coefficient directeur :", min = -2, max = 2, value = 0, step = 0.05))
+    
+  })
+  
+  output$plotTP2 <- renderPlotly({
+    validate(need(length(input$gender2) > 0, "Sélectionnez Male, Female ou les deux"))
+    set.seed(42)
+    nObs <- ifelse(is.null(input$nObs2), 100, input$nObs2)
+    ind <- sample(which(donnees$Gender %in% input$gender2), min(nObs, sum(donnees$Gender %in% input$gender2)))
+    
+    coeff <- ifelse(is.null(input$coeff), 0, input$coeff)
+    const <- ifelse(is.null(input$const), 140, input$const)
+    
+    
+    p <- plot_ly(x = donnees$Weight[ind], y = donnees$Height[ind], type = "scatter", mode = "markers") %>%
+      layout(xaxis = list(title = "Poids", range = range(donnees$Weight) * c(0.95, 1.04)), 
+             yaxis = list(title = "Taille", range = range(donnees$Height) * c(0.95, 1.04))) %>%
+      config(displayModeBar = FALSE) %>% 
+      add_trace(x = range(donnees$Weight) * c(0.95, 1.04), 
+                y = range(donnees$Weight) * c(0.95, 1.04) * coeff + const, type = "scatter", mode = "lines") %>%
+      layout(showlegend = FALSE)
   })
   
   
-
+  output$estimateParameter2 <- renderText({
+    validate(need(length(input$gender2) > 0, "Sélectionnez Male, Female ou les deux"))
+    set.seed(42)
+    nObs <- ifelse(is.null(input$nObs2), 100, input$nObs2)
+    ind <- sample(which(donnees$Gender %in% input$gender2), min(nObs, sum(donnees$Gender %in% input$gender2)))
+    
+    reslm <- lm(Height ~ Weight, data = donnees[ind,])
+    
+    paste0("Constante : ", round(reslm$coefficients[1], 3), "\nCoefficient directeur : ", round(reslm$coefficients[2], 3))
+  })
+  
+  output$param2 <- renderUI({
+    column(6, tags$b("Paramètres optimaux :"), verbatimTextOutput("estimateParameter2"))
+  })
+  
+  observeEvent(input$show2, { 
+    toggle("param2", TRUE)
+  })
+  
+  
   # Iris --------------------------------------------------------------------
   output$dataIris <- renderDT({
     datatable(iris, options = list(pageLength = 20, dom = "tip", ordering = TRUE))
