@@ -49,8 +49,15 @@ function(input, output, session) {
     )
   })
   
+  output$expPF <- renderUI({
+    box(paste0("Regarder la proportion de pile parmi les lancers revient à mettre une loi de Bernoulli sur les données et à estimer le paramètre de celle-ci (cf. doc).",
+               "Cela fait appel aux notions de probabilités, dérivées et résolutions d'équations.",
+               "De manière générale, poser une loi de probabilité sur les variables et en estimer les paramètres permet de mieux comprendre son comportement et va permettre des applications comme la classification d'individus."), status = "primary", width = 12)
+  })
+  
   observeEvent(input$showPlotPF, { 
     toggle("plotPF", TRUE)
+    toggle("expPF", TRUE)
   })
   
   
@@ -121,8 +128,15 @@ function(input, output, session) {
     column(6, tags$b("Paramètres optimaux :"), verbatimTextOutput("estimateParameter"))
   })
   
+  output$expTP <- renderUI({
+    box("En séparant par genre, on constate que les paramètres optimaux sont très différents. On en déduit des comportements différents entre les hommes et les femmes.",
+        " C'est une approche de la classification où l'on cherche à trouver des comportemetns différents parmi les individus. ",
+        "Des paramètres différents impliquent alors des comportements différents : ici les femmes plus maigres et petites que les hommes.", status = "primary", width = 12)
+  })
+  
   observeEvent(input$show, { 
     toggle("param", TRUE)
+    toggle("expTP", FALSE)
   })
   
   output$plotTP <- renderPlotly({
@@ -217,7 +231,7 @@ function(input, output, session) {
     resPca <- PCA(iris, quali.sup = 5, graph = FALSE)
     plot_ly(x = resPca$ind$coord[,1], y = resPca$ind$coord[,2], colors = RColorBrewer::brewer.pal(3, "Set1"), color = iris$Species, type = "scatter", mode = "markers") %>%
       layout(xaxis = list(title = paste0("Composante 1 (",round(resPca$eig[1,2], 2),"%)")), 
-             yaxis = list(title = paste0("Composante 1 (",round(resPca$eig[2,2], 2),"%)"))) %>%
+             yaxis = list(title = paste0("Composante 2 (",round(resPca$eig[2,2], 2),"%)"))) %>%
       config(displayModeBar = FALSE)
   })
   
