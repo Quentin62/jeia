@@ -39,3 +39,9 @@ runApp()
 
 https://quenting.shinyapps.io/jeia/
 
+## Autres documents
+
+* Exemples d'applications : http://modal-demo.lille.inria.fr:3838/smartDataApp/
+* [Slides sur la classification](./doc/classif.pdf)
+* [Pile ou face](./doc/doc.pdf)
+
